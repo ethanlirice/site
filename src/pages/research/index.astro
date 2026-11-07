@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const research = (await getCollection('research', ({ data }) => import.meta.env.DEV || !data.draft)).sort(
+  (a, b) => b.data.order - a.data.order,
+);
+---
+
+<Base title="research" description="Research Ethan Li has worked on, in ML systems and quantitative finance.">
+  <h1 class="text-head">research</h1>
+  <p class="mt-2 max-w-[60ch] text-muted">ML systems, alpha research, and a stint in particle physics.</p>
+
+  <div class="mt-10 divide-y divide-rule border-t border-rule">
+    {
+      research.map((entry) => (
+        <article class="group grid grid-cols-[1fr_auto] items-baseline gap-x-3 py-3">
+          <div class="min-w-0">
+            <a href={`/research/${entry.id}`} class="no-underline group-hover:text-accent">
+              {entry.data.title}
+            </a>
+            <p class="text-micro text-muted">
+              {entry.data.org} — {entry.data.role}
+            </p>
+          </div>
+          <span class="shrink-0 text-micro text-muted tabular-nums">{entry.data.year}</span>
+        </article>
+      ))
+    }
+  </div>
+
+  {research.length === 0 && <p class="mt-10 text-muted">Nothing here yet.</p>}
+</Base>

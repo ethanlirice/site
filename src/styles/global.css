@@ -1,0 +1,70 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/jetbrains-mono';
+
+@theme {
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --text-micro: 0.75rem;
+  --text-body: 0.875rem;
+  --text-lead: 1rem;
+  --text-head: 1.375rem;
+  --text-display: 1.875rem;
+
+  --color-ground: #fafafa;
+  --color-ink: #18181b;
+  --color-muted: #71717a;
+  --color-rule: #e4e4e7;
+  --color-accent: #2563eb;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-ground: #0a0a0a;
+    --color-ink: #e4e4e7;
+    --color-muted: #8b8b94;
+    --color-rule: #27272a;
+    --color-accent: #7aadff;
+  }
+}
+
+html {
+  color-scheme: light dark;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-ground);
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+  font-size: var(--text-body);
+  line-height: 1.6;
+  font-variant-ligatures: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--color-rule);
+  transition: color 120ms ease, text-decoration-color 120ms ease;
+}
+
+a:hover {
+  color: var(--color-accent);
+  text-decoration-color: currentColor;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0ms !important;
+    animation-duration: 0ms !important;
+  }
+}

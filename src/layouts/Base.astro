@@ -1,0 +1,45 @@
+---
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import { profile } from '../data/resume';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description = profile.bio } = Astro.props;
+const pageTitle = title ? `${title} · ${profile.name.toLowerCase()}` : profile.name.toLowerCase();
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+  </head>
+  <body>
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-10 focus:bg-ground focus:px-2 focus:py-1">
+      skip to content
+    </a>
+    <div class="mx-auto flex min-h-dvh max-w-[42rem] flex-col px-5 pt-12 pb-16 sm:pt-16 sm:pb-24">
+      <Nav />
+      <main id="main" class="flex-1">
+        <slot />
+      </main>
+      <footer class="mt-20 border-t border-rule pt-4 text-micro text-muted">
+        <p>&copy; {new Date().getFullYear()} {profile.name.toLowerCase()} — {profile.location.toLowerCase()}</p>
+      </footer>
+    </div>
+  </body>
+</html>

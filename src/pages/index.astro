@@ -1,0 +1,49 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import EntryRow from '../components/EntryRow.astro';
+import { profile, work, clubs } from '../data/resume';
+
+const featured = (await getCollection('projects', ({ data }) => data.featured && !data.draft)).sort(
+  (a, b) => b.data.order - a.data.order,
+);
+
+// NOW is derived from the résumé data so the two can't disagree.
+const now = [...work, ...clubs].filter((entry) => entry.current);
+---
+
+<Base>
+  <h1 class="text-display leading-tight">{profile.name.toLowerCase()}</h1>
+  <p class="mt-1 text-muted">{profile.tagline}</p>
+  <p class="mt-6 max-w-[60ch]">{profile.bio}</p>
+
+  <div class="mt-16">
+    <Section label="now">
+      {now.map((entry) => <EntryRow title={entry.org} note={entry.role} meta={entry.dates} />)}
+    </Section>
+
+    <Section label="selected work">
+      <Fragment slot="aside">
+        <a href="/projects">all projects →</a>
+      </Fragment>
+      {
+        featured.map((entry) => (
+          <EntryRow
+            title={entry.data.title}
+            note={entry.data.blurb}
+            meta={entry.data.year}
+            href={`/projects/${entry.id}`}
+          />
+        ))
+      }
+    </Section>
+
+    <Section label="elsewhere">
+      <ul class="flex flex-wrap gap-x-4 gap-y-1">
+        {profile.links.map((link) => <li><a href={link.href}>{link.label}</a></li>)}
+        <li><a href="/resume">cv</a></li>
+      </ul>
+    </Section>
+  </div>
+</Base>

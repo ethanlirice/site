@@ -1,0 +1,41 @@
+---
+import { profile } from '../data/resume';
+
+const items = [
+  { label: 'home', href: '/' },
+  { label: 'projects', href: '/projects' },
+  { label: 'research', href: '/research' },
+  { label: 'cv', href: '/resume' },
+];
+
+// "/projects/white-lights" should still light up the "projects" tab.
+const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const isActive = (href: string) => (href === '/' ? path === '/' : path === href || path.startsWith(`${href}/`));
+---
+
+<header class="mb-16 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+  <a href="/" class="no-underline hover:text-accent">{profile.name.toLowerCase()}</a>
+  <nav aria-label="Main">
+    <ul class="flex flex-wrap gap-x-1 text-micro">
+      {
+        items.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+              class:list={[
+                'no-underline',
+                isActive(item.href) ? 'text-ink' : 'text-muted hover:text-accent',
+              ]}
+            >
+              <span class="text-muted" aria-hidden="true">[</span>{item.label}<span
+                class="text-muted"
+                aria-hidden="true">]</span
+              >
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>

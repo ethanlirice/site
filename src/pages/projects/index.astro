@@ -1,0 +1,29 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import EntryRow from '../../components/EntryRow.astro';
+
+const projects = (await getCollection('projects', ({ data }) => import.meta.env.DEV || !data.draft)).sort(
+  (a, b) => b.data.order - a.data.order || b.data.year.localeCompare(a.data.year),
+);
+---
+
+<Base title="projects" description="Things Ethan Li has built.">
+  <h1 class="text-head">projects</h1>
+  <p class="mt-2 max-w-[60ch] text-muted">Things I've built, mostly to answer a question I had.</p>
+
+  <div class="mt-10 divide-y divide-rule border-t border-rule">
+    {
+      projects.map((entry) => (
+        <EntryRow
+          title={entry.data.title}
+          note={entry.data.blurb}
+          meta={entry.data.year}
+          href={`/projects/${entry.id}`}
+        />
+      ))
+    }
+  </div>
+
+  {projects.length === 0 && <p class="mt-10 text-muted">Nothing here yet.</p>}
+</Base>

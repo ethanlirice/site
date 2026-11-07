@@ -1,0 +1,104 @@
+---
+/**
+ * Typographic defaults for rendered markdown bodies. Scoped styles rather than
+ * @tailwindcss/typography — the type scale here is already narrow and mono-only,
+ * and the plugin's serif-ish rhythm fights it.
+ */
+---
+
+<div class="prose-mono">
+  <slot />
+</div>
+
+<style>
+  .prose-mono {
+    max-width: 72ch;
+  }
+
+  .prose-mono :global(> * + *) {
+    margin-top: 1rem;
+  }
+
+  .prose-mono :global(h2),
+  .prose-mono :global(h3) {
+    margin-top: 2rem;
+    font-size: var(--text-lead);
+    font-weight: 500;
+  }
+
+  .prose-mono :global(h2) {
+    border-bottom: 1px solid var(--color-rule);
+    padding-bottom: 0.25rem;
+  }
+
+  .prose-mono :global(ul),
+  .prose-mono :global(ol) {
+    padding-left: 1.25rem;
+  }
+
+  .prose-mono :global(ul) {
+    list-style: none;
+  }
+
+  .prose-mono :global(ul > li)::before {
+    content: '—';
+    position: absolute;
+    margin-left: -1.25rem;
+    color: var(--color-muted);
+  }
+
+  .prose-mono :global(ol) {
+    list-style: decimal;
+  }
+
+  .prose-mono :global(li) {
+    position: relative;
+  }
+
+  .prose-mono :global(li + li) {
+    margin-top: 0.25rem;
+  }
+
+  .prose-mono :global(code) {
+    background: color-mix(in oklab, var(--color-rule) 60%, transparent);
+    padding: 0.1em 0.3em;
+    font-size: 0.9em;
+  }
+
+  .prose-mono :global(pre) {
+    overflow-x: auto;
+    border: 1px solid var(--color-rule);
+    padding: 0.75rem;
+    font-size: var(--text-micro);
+  }
+
+  .prose-mono :global(pre code) {
+    background: none;
+    padding: 0;
+  }
+
+  .prose-mono :global(blockquote) {
+    border-left: 2px solid var(--color-rule);
+    padding-left: 0.75rem;
+    color: var(--color-muted);
+  }
+
+  .prose-mono :global(img) {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .prose-mono :global(table) {
+    display: block;
+    overflow-x: auto;
+    border-collapse: collapse;
+    font-size: var(--text-micro);
+  }
+
+  .prose-mono :global(th),
+  .prose-mono :global(td) {
+    border: 1px solid var(--color-rule);
+    padding: 0.3rem 0.5rem;
+    text-align: left;
+  }
+</style>

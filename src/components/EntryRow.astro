@@ -1,0 +1,28 @@
+---
+interface Props {
+  title: string;
+  /** Right-hand column — a year or date range. */
+  meta?: string;
+  note?: string;
+  href?: string;
+}
+
+const { title, meta, note, href } = Astro.props;
+const Title = href ? 'a' : 'span';
+---
+
+<div class="group grid grid-cols-[1fr_auto] items-baseline gap-x-3 py-1.5">
+  <div class="min-w-0">
+    <Title
+      href={href}
+      class:list={[
+        'break-words',
+        href ? 'no-underline group-hover:text-accent' : 'no-underline',
+      ]}
+    >
+      {title}
+    </Title>
+    {note && <span class="text-muted"> — {note}</span>}
+  </div>
+  {meta && <span class="shrink-0 text-micro text-muted tabular-nums">{meta}</span>}
+</div>

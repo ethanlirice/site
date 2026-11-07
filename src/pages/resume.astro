@@ -1,0 +1,89 @@
+---
+import { existsSync } from 'node:fs';
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import { profile, education, honors, work, clubs, skills } from '../data/resume';
+import type { Entry } from '../data/resume';
+
+// Only surface the download link once the PDF is actually in public/, so the
+// live site never ships a dead link. Resolved against the project root, which
+// is the cwd for `astro dev`/`astro build`. Note: `import.meta.url` can't be
+// used here — it resolves into the bundled chunk, not into src/.
+const hasPdf = existsSync(new URL('public/resume.pdf', `file://${process.cwd()}/`));
+
+const groups: { label: string; entries: Entry[] }[] = [
+  { label: 'education', entries: education },
+  { label: 'experience', entries: work },
+  { label: 'projects & clubs', entries: clubs },
+];
+---
+
+<Base title="cv" description={`Résumé for ${profile.name} — ${profile.tagline}.`}>
+  <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+    <h1 class="text-head">cv</h1>
+    {hasPdf && <a href="/resume.pdf" class="text-micro">download pdf ↗</a>}
+  </div>
+
+  <p class="mt-2 text-micro text-muted">
+    {profile.location} · <a href={`mailto:${profile.email}`}>{profile.email}</a>
+  </p>
+
+  <div class="mt-12">
+    {
+      groups.map((group) => (
+        <Section label={group.label}>
+          <div class="space-y-6">
+            {group.entries.map((entry) => (
+              <article>
+                <div class="grid grid-cols-[1fr_auto] items-baseline gap-x-3">
+                  <h3 class="min-w-0 break-words">{entry.org}</h3>
+                  <span class="shrink-0 text-micro text-muted">{entry.dates}</span>
+                </div>
+                <p class="text-muted">
+                  {entry.role}
+                  {entry.place && <span class="text-micro"> · {entry.place}</span>}
+                </p>
+                {entry.bullets.length > 0 && (
+                  <ul class="mt-2 space-y-1">
+                    {entry.bullets.map((bullet) => (
+                      <li class="grid grid-cols-[1ch_1fr] gap-x-2">
+                        <span class="text-muted" aria-hidden="true">—</span>
+                        <span>{bullet}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </article>
+            ))}
+          </div>
+        </Section>
+      ))
+    }
+
+    <Section label="honors & awards">
+      <ul class="space-y-1">
+        {
+          honors.map((honor) => (
+            <li class="grid grid-cols-[1ch_1fr] gap-x-2">
+              <span class="text-muted" aria-hidden="true">—</span>
+              <span>{honor}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </Section>
+
+    <Section label="skills & interests">
+      <dl class="space-y-2">
+        {
+          skills.map((group) => (
+            <div class="grid gap-x-3 sm:grid-cols-[10rem_1fr]">
+              <dt class="text-micro tracking-[0.08em] text-muted uppercase sm:pt-0.5">{group.label}</dt>
+              <dd>{group.items.join(' · ')}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </Section>
+  </div>
+</Base>

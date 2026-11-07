@@ -1,0 +1,22 @@
+---
+interface Props {
+  label: string;
+  class?: string;
+}
+
+const { label, class: className } = Astro.props;
+---
+
+<section class:list={['mb-14', className]}>
+  <div class="mb-3 flex items-baseline justify-between gap-4 border-b border-rule pb-1.5">
+    <h2 class="text-micro tracking-[0.12em] text-muted uppercase">{label}</h2>
+    {
+      Astro.slots.has('aside') && (
+        <div class="text-micro text-muted">
+          <slot name="aside" />
+        </div>
+      )
+    }
+  </div>
+  <slot />
+</section>
