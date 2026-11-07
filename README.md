@@ -1,4 +1,4 @@
-# ethanli.dev
+# ethanli.vercel.app
 
 Personal site — Astro 7, Tailwind 4, static output, deployed on Vercel.
 
@@ -59,6 +59,10 @@ uppercase letterspaced section labels. Tokens are defined once in
 
 ## Deploying
 
-Vercel auto-detects Astro and serves `dist/` — no adapter and no `vercel.json`
-needed, since `output` is `static`. Set the production domain, then update
-`site` in `astro.config.mjs` so canonical and OG URLs are right.
+Pushing to `main` triggers a production deploy; any other branch or PR gets its
+own preview URL. Vercel auto-detects Astro and serves `dist/` — no adapter and
+no `vercel.json` needed, since `output` is `static`.
+
+`site` in `astro.config.mjs` must match the domain actually being served; it
+feeds canonical URLs, OG tags, and the sitemap. If the site later moves to a
+custom domain, update it there in the same change as the DNS cutover.
